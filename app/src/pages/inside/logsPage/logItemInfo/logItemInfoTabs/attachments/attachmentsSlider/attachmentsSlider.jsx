@@ -4,6 +4,7 @@ import Parser from 'html-react-parser';
 import classNames from 'classnames/bind';
 import { WithStore, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
 import ArrowIcon from 'common/img/arrow-right-inline.svg';
+import { Image } from 'components/main/image';
 import { DEFAULT_VISIBLE_THUMBS } from '../constants';
 import styles from './attachmentsSlider.scss';
 
@@ -96,6 +97,9 @@ class AttachmentsSlider extends Component {
     this.props.changeActiveItem(prevItemId, thumbConfig);
   };
 
+  renderImage = (item, props) =>
+    item.isImage ? <Image {...props} /> : <img alt={props.alt} {...props} />;
+
   render() {
     const { isThumbsView, activeItemId, onClickItem } = this.props;
     return (
@@ -107,11 +111,11 @@ class AttachmentsSlider extends Component {
                 className={cx('preview-container', { 'main-area': !isThumbsView })}
                 onClick={() => onClickItem(index)}
               >
-                <img
-                  className={cx('preview', { active: isThumbsView && activeItemId === index })}
-                  src={attachment.src}
-                  alt={attachment.alt}
-                />
+                {this.renderImage(attachment, {
+                  className: cx('preview', { active: isThumbsView && activeItemId === index }),
+                  src: attachment.src,
+                  alt: attachment.alt,
+                })}
               </div>
             </Slide>
           ))}
